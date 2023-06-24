@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  php-fpm:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - my-network
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./app:/var/www/html
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - php-fpm
+    links:
+      - php-fpm  
+    networks:
+      - my-network
+networks:
+  my-network:
