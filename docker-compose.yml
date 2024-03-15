@@ -1,6 +1,7 @@
 version: '3.8'
 services:
-  php-fpm:
+# PHP Service
+  backend-php:
     restart: always
     build:
       context: .
@@ -8,21 +9,35 @@ services:
     volumes:
       - ./app:/var/www/html
     networks:
-      - my-network
-  nginx:
+      - app-network
+# Nginx Service      
+  webserver:
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
     ports:
-      - 8080:80
+      - 80:80
     volumes:
       - ./app:/var/www/html
       - ./nginx:/etc/nginx/conf.d
     depends_on:
-      - php-fpm
+      - backend-php
     links:
-      - php-fpm  
+      - backend-php  
     networks:
-      - my-network
+      - app-network
+# PostgreSQL Service
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: testdbuser
+      POSTGRES_PASSWORD: testpwd
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network      
 networks:
-  my-network:
+  app-network:
+volumes:
+  pgdata:  
