@@ -8,6 +8,7 @@ services:
       context: .
       dockerfile: ./php/Dockerfile
     volumes:
+      - ./php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./app:/var/www/html
     networks:
       - app-network
@@ -37,8 +38,46 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - app-network      
+      - app-network
+  grafana:
+# Grafana    
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    networks:
+      - app-network
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+    - GF_SECURITY_ADMIN_USER=admin
+    - GF_SECURITY_ADMIN_PASSWORD=admin
+    - GF_INSTALL_PLUGINS=simpod-json-datasource 
+  # Prometheus  
+  prometheus:
+      image: prom/prometheus
+      container_name: prometheus
+      command: '--config.file=/etc/prometheus/prometheus.yml'
+      networks:
+        - app-network
+      ports:
+        - 9090:9090
+      restart: unless-stopped
+      volumes:
+        - ./prometheus:/etc/prometheus
+        - prom_data:/prometheus
+  # prom exporter      
+  phpfpm_exporter:
+    image: hipages/php-fpm_exporter:latest
+    command: ["--phpfpm.scrape-uri", "tcp://backend-php:9002/status"]
+    ports:
+      - 9253:9253
+    networks:
+      - app-network
 networks:
   app-network:
 volumes:
-  pgdata:  
+  pgdata:
+  grafana-storage:
+  prom_data:
