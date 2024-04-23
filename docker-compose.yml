@@ -39,6 +39,24 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - app-network
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start-dev
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: db
+      DB_DATABASE: keycloak
+      DB_USER: testdbuser
+      DB_SCHEMA: public
+      DB_PASSWORD: testpwd
+      KEYCLOAK_USER: kc_user
+      KEYCLOAK_PASSWORD: kc_pass
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8080:8080
+    depends_on:
+      - db    
   grafana:
 # Grafana    
     image: grafana/grafana:latest
