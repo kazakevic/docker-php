@@ -14,26 +14,19 @@ doctrine:
         # either here or in the DATABASE_URL env var (see .env file)
         #server_version: '16'
     orm:
-        default_entity_manager: postgres
-        entity_managers:
-            postgres:
-                connection: postgres
-                mappings:
-                    App:
-                        type: attribute
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity'
-                        alias: App
-            mariadb:
-                connection: mariadb
-                mappings:
-                    App:
-                        type: attribute
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Entity'
-                        prefix: 'App\Entity'
-                        alias: App
+        auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            App:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App
 
 when@test:
     doctrine:
@@ -44,14 +37,16 @@ when@test:
 when@prod:
     doctrine:
         orm:
+            auto_mapping: true
+            # the standard distribution overrides this to be true in debug, false otherwise
             auto_generate_proxy_classes: false
-            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
-            query_cache_driver:
-                type: pool
-                pool: doctrine.system_cache_pool
-            result_cache_driver:
-                type: pool
-                pool: doctrine.result_cache_pool
+            proxy_namespace: Proxies
+            proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+            default_entity_manager: default
+            metadata_cache_driver: array
+            query_cache_driver: array
+            result_cache_driver: array
+            naming_strategy: doctrine.orm.naming_strategy.default
 
     framework:
         cache:
