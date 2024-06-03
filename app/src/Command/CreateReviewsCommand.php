@@ -6,11 +6,7 @@ namespace App\Command;
 
 use App\Factory\ReviewsFactory;
 use App\Repository\ReviewRepository;
-use Doctrine\DBAL\Driver\Middleware;
 use Doctrine\ORM\EntityManagerInterface;
-use Prometheus\CollectorRegistry;
-use Prometheus\Storage\APC;
-use Prometheus\Storage\InMemory;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
