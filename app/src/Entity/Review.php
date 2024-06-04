@@ -28,6 +28,12 @@ class Review
     #[ORM\Column(type: 'string', enumType: ReviewStatus::class)]
     private ?ReviewStatus $status = null;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $tags = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,5 +81,29 @@ class Review
     {
         $this->status = $category;
         return $this;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    /** @param $tags array<int, string> */
+    public function setTags(array $tags): self
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+
+    /** @return null|array<int, string> */
+    public function getTags(): ?array
+    {
+        return $this->tags;
     }
 }

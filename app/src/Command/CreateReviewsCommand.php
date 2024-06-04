@@ -37,7 +37,7 @@ class CreateReviewsCommand extends Command
         $this->entityManager->getConfiguration()->setMiddlewares([new Middleware(new NullLogger())]);
         $counter = 0;
 
-        while ($counter < 500000) {
+        while ($counter < 1000000) {
             $counter++;
             $review = ReviewsFactory::create(Uuid::v7()->toString());
             $this->entityManager->persist($review);

@@ -15,6 +15,7 @@ class ReviewsFactory
         $review->setText($text);
         $review->setLocale('en_US');
         $review->setStatus(ReviewStatus::ACTIVE);
+        $review->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
         $review->setRating('10');
 
         return $review;
