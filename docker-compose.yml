@@ -8,7 +8,8 @@ services:
       context: .
       dockerfile: ./php/Dockerfile
     volumes:
-      - ./php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php/config/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./php/config/php:/usr/local/etc/php/conf.d
       - ./app:/var/www/html
     networks:
       - app-network
