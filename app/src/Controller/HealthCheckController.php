@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HealthCheckController
 {
-    #[Route('/api/health', name: 'health_check', methods: ['post'])]
+    #[Route('/api/health', name: 'health_check', methods: ['post', 'get'])]
     public function __invoke(): Response
     {
         return new JsonResponse(['ok']);
